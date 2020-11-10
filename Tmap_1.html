@@ -17,6 +17,7 @@
 					[127.014, 37.596326, 126.993, 37.572195],
 					[127.014, 37.596326, 126.949, 37.587077],
 					[127.014, 37.596326, 127.077, 37.458150],
+					[127.014, 37.596326, 127.003, 37.573050],
 				];
 
 				// 반복 횟수 제한을 위한 데이터 수집 일자
@@ -47,8 +48,7 @@
 
 			function getTime(ox, oy, dx, dy) {
 
-				$
-						.ajax({
+				$.ajax({
 							type : "POST",
 							url : "https://apis.openapi.sk.com/tmap/routes?version=1&format=json&callback=result",
 							async : false,
