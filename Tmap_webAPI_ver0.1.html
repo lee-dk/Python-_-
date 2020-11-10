@@ -1,0 +1,123 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>simpleMap</title>
+		<script	src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xxd0e2cb7978924dbfab496f5d7aabce1a"></script>
+		<script type="text/javascript">
+
+			function iterFunc() {
+			
+				// 좌표 목록 입력
+				// element = [origin_x, origin_y, destination_x, destination_y]
+				var coordArr = [
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					[126.985038, 37.566568, 127.103318, 37.403049],
+					[126.885038, 37.4566568, 127.0103318, 37.503049],
+					
+				];
+				
+				// 반복 횟수 제한을 위한 데이터 수집 일자
+				// EX) 1일차 : 1
+				//	   2일차 : 2
+				var day_num = 1;
+				
+				var start_num = (parseInt(day_num) - 1) * 1000;
+				var end_num = (parseInt(day_num) * 1000) - 1
+				
+								
+				for(var cnt in coordArr){									// 전체 반복
+				//for(var cnt = start_num; cnt <= end_num; cnt++){			// 시-종점 반복
+				
+					var ele = coordArr[cnt];
+				
+					var ox = ele[0];
+					var oy = ele[1];
+					var dx = ele[2];
+					var dy = ele[3];
+					
+					var rowid = parseInt(cnt) + 1000;
+				
+					getTime(rowid, ox, oy, dx, dy);	
+				};
+			}
+
+
+			function getTime(rowid, ox, oy, dx, dy) {
+								
+				$
+						.ajax({
+							type : "POST",
+							url : "https://apis.openapi.sk.com/tmap/routes?version=1&format=json&callback=result",
+							async : false,
+							data : {
+								"appKey" : "l7xxd0e2cb7978924dbfab496f5d7aabce1a",
+								"startX" : ox,
+								"startY" : oy,
+								"endX" : dx,
+								"endY" : dy,
+								"reqCoordType" : "WGS84GEO",
+								"resCoordType" : "EPSG3857",
+								"searchOption" : "0",
+								"trafficInfo" : "N"
+							},
+							success : function(response) {
+
+								var resultData = response.features;
+								
+								var tDistance = (resultData[0].properties.totalDistance / 1000).toFixed(2);
+								var tTime = (resultData[0].properties.totalTime / 60).toFixed(0);
+								
+
+								// 출력 형식
+								var rtnMsg = rowid + "," + ox + ", " + oy + ", " + dx + ", " + dy + ", "
+												+ tDistance + ", " + tTime + "<br>";
+												
+												
+								$("#result").append(rtnMsg);
+
+							},
+							error : function(request, status, error) {
+								console.log("code:"
+										+ request.status + "\n"
+										+ "message:"
+										+ request.responseText
+										+ "\n" + "error:" + error );
+							}
+						});
+			}
+			
+		</script>
+	</head>
+	<body onload="iterFunc();">
+		<!-- 데이터 헤더 -->
+		<p id="result">rowid, orig_X, orig_Y, dest_X, dest_Y, T_time_min, T_dist_km<br></p>
+	</body>
+</html>
