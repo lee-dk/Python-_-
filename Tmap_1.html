@@ -6,6 +6,8 @@
 		<script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xxd0e2cb7978924dbfab496f5d7aabce1a"></script>
 		<script type="text/javascript">
 
+            var x_pos = ['127.014', '126.979', '126.993', '126.949', '127.077', '126.994', '127.003']
+            var y_pos = ['37.596326', '37.568157', '37.572195', '37.587077', '37.458150', '37.569238', '37.573050']
 			function iterFunc() {
 
 				// 좌표 목록 입력
@@ -13,25 +15,16 @@
 				var coordArr = [
 				    //[출발x, 출발y, 도착x, 도착y]
 
-					[127.014, 37.596326, 126.979, 37.568157],
-					[127.014, 37.596326, 126.993, 37.572195],
-					[127.014, 37.596326, 126.949, 37.587077],
-					[127.014, 37.596326, 127.077, 37.458150],
-					[127.014, 37.596326, 127.003, 37.573050],
+                    [x_pos[0], y_pos[0], x_pos[1], y_pos[1]],
+					[x_pos[1], y_pos[1], x_pos[2], y_pos[2]],
+					[x_pos[2], y_pos[2], x_pos[3], y_pos[3]],
+					[x_pos[3], y_pos[3], x_pos[4], y_pos[4]],
+					[x_pos[4], y_pos[4], x_pos[5], y_pos[5]],
+					[x_pos[5], y_pos[5], x_pos[6], y_pos[6]],
+					[x_pos[1], y_pos[1], x_pos[2], y_pos[2]],
 				];
 
-				// 반복 횟수 제한을 위한 데이터 수집 일자
-				// EX) 1일차 : 1
-				//	   2일차 : 2
-				var day_num = 1;
-
-				var start_num = (parseInt(day_num) - 1) * 1000;
-				var end_num = (parseInt(day_num) * 1000) - 1
-
-
-				for(var cnt in coordArr){									// 전체 반복
-				//for(var cnt = start_num; cnt <= end_num; cnt++){			// 시-종점 반복
-
+				for(var cnt in coordArr){			// 전체 반복
 					var ele = coordArr[cnt];
 
 					var ox = ele[0];
@@ -45,54 +38,52 @@
 				};
 			}
 
-
 			function getTime(ox, oy, dx, dy) {
+                    $.ajax({
+                        type : "POST",
+                        url : "https://apis.openapi.sk.com/tmap/routes?version=1&format=json&callback=result",
+                        async : false,
+                        data : {
+                            "appKey" : "l7xxd0e2cb7978924dbfab496f5d7aabce1a",
+                            "startX" : ox,
+                            "startY" : oy,
+                            "endX" : dx,
+                            "endY" : dy,
+                            "reqCoordType" : "WGS84GEO",
+                            "resCoordType" : "EPSG3857",
+                            "searchOption" : "0",
+                            "trafficInfo" : "N"
+                        },
+                        success : function(response) {
 
-				$.ajax({
-							type : "POST",
-							url : "https://apis.openapi.sk.com/tmap/routes?version=1&format=json&callback=result",
-							async : false,
-							data : {
-								"appKey" : "l7xxd0e2cb7978924dbfab496f5d7aabce1a",
-								"startX" : ox,
-								"startY" : oy,
-								"endX" : dx,
-								"endY" : dy,
-								"reqCoordType" : "WGS84GEO",
-								"resCoordType" : "EPSG3857",
-								"searchOption" : "0",
-								"trafficInfo" : "N"
-							},
-							success : function(response) {
+                            var resultData = response.features;
 
-								var resultData = response.features;
-
-								var tDistance = (resultData[0].properties.totalDistance / 1000).toFixed(2);
-								var tTime = (resultData[0].properties.totalTime / 60).toFixed(0);
-
-
-								// 출력 형식
-								var rtnMsg = ox + ", " + oy + ", " + dx + ", " + dy + ", "
-												+ tDistance + ", " + tTime + "<br>";
+                            var tDistance = (resultData[0].properties.totalDistance / 1000).toFixed(2);
+                            var tTime = (resultData[0].properties.totalTime / 60).toFixed(0);
 
 
-								$("#result").append(rtnMsg);
+                            // 출력 형식
+                            var rtnMsg = ox + ", " + oy + ", " + dx + ", " + dy + ", "
+                                            + tDistance + ", " + tTime + "<br>";
 
-							},
-							error : function(request, status, error) {
-								console.log("code:"
-										+ request.status + "\n"
-										+ "message:"
-										+ request.responseText
-										+ "\n" + "error:" + error );
-							}
-						});
+
+                            $("#result").append(rtnMsg);
+
+                        },
+                        error : function(request, status, error) {
+                            console.log("code:"
+                                    + request.status + "\n"
+                                    + "message:"
+                                    + request.responseText
+                                    + "\n" + "error:" + error );
+                        }
+                    });
 			}
 
 		</script>
 	</head>
 	<body onload="iterFunc();">
 		<!-- 데이터 헤더 -->
-		<p id="result">orig_X, orig_Y, dest_X, dest_Y, T_time_min, T_dist_km<br></p>
+		<p id="result">Start_X, Start_Y, End_X, End_Y, TravelTime, T_dist_km<br></p>
 	</body>
 </html>
