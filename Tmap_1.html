@@ -1,39 +1,62 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>simpleMap</title>
+		<title>TravelTime</title>
 		<script	src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 		<script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xxd0e2cb7978924dbfab496f5d7aabce1a"></script>
 		<script type="text/javascript">
 
-            var x_pos = ['127.014', '126.979', '126.993', '126.949', '127.077', '126.994', '127.003']
-            var y_pos = ['37.596326', '37.568157', '37.572195', '37.587077', '37.458150', '37.569238', '37.573050']
+			var start_x_pos = ['127.027977657727', '126.977181235023']
+			var start_y_pos = ['37.4980854411503', '37.5653372841193']
+
+            var x_pos = ['127.151700', '126.862524', '126.979271', '127.092537', '126.994690', '127.044248', '127.104944', '127.127259', '127.055595', '126.973269', '126.954635', '127.084621', '126.806736', '127.125388', '126.894004', '127.121997']
+            var y_pos = ['37.557347', '37.542747', '37.488853', '37.502862', '37.520521', '37.546461', '37.489031', '37.551953', '37.564030', '37.521552', '37.526423', '37.483657', '37.566860', '37.543610', '37.536550', '37.538177']
 			function iterFunc() {
-
 				// 좌표 목록 입력
-				// element = [origin_x, origin_y, destination_x, destination_y]
 				var coordArr = [
-				    //[출발x, 출발y, 도착x, 도착y]
+					//강남역 출발
+					//[start_x_pos[0], start_y_pos[0], x_pos[0], y_pos[0]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[1], y_pos[1]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[2], y_pos[2]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[3], y_pos[3]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[4], y_pos[4]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[5], y_pos[5]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[6], y_pos[6]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[7], y_pos[7]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[8], y_pos[8]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[9], y_pos[9]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[10], y_pos[10]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[11], y_pos[11]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[12], y_pos[12]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[13], y_pos[13]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[14], y_pos[14]],
+					//[start_x_pos[0], start_y_pos[0], x_pos[15], y_pos[15]],
 
-                    [x_pos[0], y_pos[0], x_pos[1], y_pos[1]],
-					[x_pos[1], y_pos[1], x_pos[2], y_pos[2]],
-					[x_pos[2], y_pos[2], x_pos[3], y_pos[3]],
-					[x_pos[3], y_pos[3], x_pos[4], y_pos[4]],
-					[x_pos[4], y_pos[4], x_pos[5], y_pos[5]],
-					[x_pos[5], y_pos[5], x_pos[6], y_pos[6]],
-					[x_pos[1], y_pos[1], x_pos[2], y_pos[2]],
+					//시청역 출발
+					//[start_x_pos[1], start_y_pos[1], x_pos[0], y_pos[0]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[1], y_pos[1]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[2], y_pos[2]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[3], y_pos[3]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[4], y_pos[4]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[5], y_pos[5]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[6], y_pos[6]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[7], y_pos[7]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[8], y_pos[8]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[9], y_pos[9]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[10], y_pos[10]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[11], y_pos[11]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[12], y_pos[12]],
+					//[start_x_pos[1], start_y_pos[1], x_pos[13], y_pos[13]],
+					[start_x_pos[1], start_y_pos[1], x_pos[14], y_pos[14]],
+					[start_x_pos[1], start_y_pos[1], x_pos[15], y_pos[15]],
 				];
 
-				for(var cnt in coordArr){			// 전체 반복
+				for(var cnt in coordArr){
 					var ele = coordArr[cnt];
-
 					var ox = ele[0];
 					var oy = ele[1];
 					var dx = ele[2];
 					var dy = ele[3];
-
-					var rowid = parseInt(cnt) + 1000;
-
 					getTime(ox, oy, dx, dy);
 				};
 			}
@@ -44,31 +67,26 @@
                         url : "https://apis.openapi.sk.com/tmap/routes?version=1&format=json&callback=result",
                         async : false,
                         data : {
-                            "appKey" : "l7xxd0e2cb7978924dbfab496f5d7aabce1a",
-                            "startX" : ox,
-                            "startY" : oy,
-                            "endX" : dx,
-                            "endY" : dy,
-                            "reqCoordType" : "WGS84GEO",
-                            "resCoordType" : "EPSG3857",
-                            "searchOption" : "0",
-                            "trafficInfo" : "N"
+							"appKey" : "l7xxd0e2cb7978924dbfab496f5d7aabce1a",
+							"startX" : ox,
+							"startY" : oy,
+							"endX" : dx,
+							"endY" : dy,
+							"reqCoordType" : "WGS84GEO",
+							"resCoordType" : "EPSG3857",
+							"searchOption" : "0",
+							"trafficInfo" : "N"
                         },
                         success : function(response) {
+							setTimeout(function() {
+								var resultData = response.features;
+								var tTime = (resultData[0].properties.totalTime / 60).toFixed(0);
 
-                            var resultData = response.features;
+								// 출력 형식
+								var rtnMsg = ox + ", " + oy + ", " + dx + ", " + dy + ",	 " + tTime + "<br>";
 
-                            var tDistance = (resultData[0].properties.totalDistance / 1000).toFixed(2);
-                            var tTime = (resultData[0].properties.totalTime / 60).toFixed(0);
-
-
-                            // 출력 형식
-                            var rtnMsg = ox + ", " + oy + ", " + dx + ", " + dy + ", "
-                                            + tDistance + ", " + tTime + "<br>";
-
-
-                            $("#result").append(rtnMsg);
-
+								$("#result").append(rtnMsg);
+							}, 500);
                         },
                         error : function(request, status, error) {
                             console.log("code:"
@@ -84,6 +102,6 @@
 	</head>
 	<body onload="iterFunc();">
 		<!-- 데이터 헤더 -->
-		<p id="result">Start_X, Start_Y, End_X, End_Y, TravelTime, T_dist_km<br></p>
+		<p id="result">start_X, start_Y_pos, end_X, end_Y_pos, TravelTime<br></p>
 	</body>
 </html>
